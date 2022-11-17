@@ -1,0 +1,145 @@
+﻿@model DataAccess.Student
+
+@{
+    ViewBag.Title = "Create";
+}
+
+
+@using (Html.BeginForm("Create", "Students", FormMethod.Post, new { @enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="dashboard-content-one">
+        <!-- Breadcubs Area Start Here -->
+        <div class="breadcrumbs-area">
+            <h3>Students</h3>
+            <ul>
+                <li>
+                    <a href="@Url.Action("Index", "Students")">All Students</a>
+                </li>
+                <li>Student Admit Form</li>
+            </ul>
+        </div>
+        <!-- Breadcubs Area End Here -->
+        <!-- Admit Form Area Start Here -->
+        <div class="card height-auto">
+            <div class="card-body">
+
+                <div class="heading-layout1">
+                    <div class="item-title">
+                        <h3>Add New Students</h3>
+                    </div>
+                    <div class="dropdown">
+                        <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown"
+                           aria-expanded="false">...</a>
+
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <a class="dropdown-item" href="#">
+                                <i class="fas fa-times text-orange-red"></i>Close
+                            </a>
+                            <a class="dropdown-item" href="#">
+                                <i class="fas fa-cogs text-dark-pastel-green"></i>Edit
+                            </a>
+                            <a class="dropdown-item" href="#">
+                                <i class="fas fa-redo-alt text-orange-peel"></i>Refresh
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+
+                <form class="new-added-form">
+                    <div class="row">
+                        <div class="col-xl-4 col-lg-6 col-12 form-group">
+                            <label>StudentID *</label>
+                            <div class="col-md-12">
+                                @Html.EditorFor(model => model.StudentID, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.StudentID, "", new { @class = "text-danger" })
+                                <h4>@Html.Raw(ViewBag.errorId)</h4>
+                            </div>
+                        </div>
+                        <div class="col-xl-4 col-lg-6 col-12 form-group">
+                            <label>Student Name *</label>
+                            <div class="col-md-12">
+                                @Html.EditorFor(model => model.StudentName, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.StudentName, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-xl-4 col-lg-6 col-12 form-group">
+                            <label>Address *</label>
+                            <div class="col-md-12">
+                                @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-xl-4 col-lg-6 col-12 form-group">
+                            <label>Gender *</label>
+                            <div class="col-md-12">
+                                <select class="select2" id="Gender" name="Gender">
+                                    <option value="">Please Select Gender *</option>
+                                    <option value="true">Male</option>
+                                    <option value="false">Female</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-xl-4 col-lg-6 col-12 form-group">
+                            <label>Date Of Birth *</label>
+                            <div class="col-md-12">
+                                @Html.EditorFor(model => model.Birthday, new { htmlAttributes = new { @class = "form-control air-datepicker" } })
+                                @Html.ValidationMessageFor(model => model.Birthday, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-xl-4 col-lg-6 col-12 form-group">
+                            <label>E-Mail</label>
+                            <div class="col-md-12">
+                                @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-xl-4 col-lg-6 col-12 form-group">
+                            <label>Password</label>
+                            <div class="col-md-12">
+                                @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", @type = "password" } })
+                                @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                                <h4>@Html.Raw(ViewBag.errorPass)</h4>
+                            </div>
+                        </div>
+                        <div class="col-xl-4 col-lg-6 col-12 form-group">
+                            <label>Phone</label>
+                            <div class="col-md-12">
+                                @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-xl-4 col-lg-6 col-12 form-group">
+                            <label>Status *</label>
+                            <select class="select2" id="Status" name="Status">
+                                <option value="">Please Select Status *</option>
+                                <option value="true">On</option>
+                                <option value="false">Off</option>
+                            </select>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-12 form-group">
+                            <label>Educationlevel</label>
+                            <div class="col-md-12">
+                                @Html.EditorFor(model => model.Educationlevel, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Educationlevel, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-12 form-group">
+                            <label class="text-dark-medium">Upload Student Photo</label>
+                            <div class="col-md-10">
+                                <input type="file" name="image" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-12 form-group mg-t-8">
+                            <button type="submit" class="btn-fill-lg btn-gradient-yellow btn-hover-bluedark" value="Create">Save</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,132 @@
+﻿@model IEnumerable<DataAccess.TimeTable>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int i = 1;
+}
+<!-- Breadcubs Area Start Here -->
+<div class="breadcrumbs-area">
+    <h3>TimeTables</h3>
+    <ul>
+        <li>
+            <a href="#">Home</a>
+        </li>
+        <li>All TimeTable</li>
+    </ul>
+</div>
+<!-- Breadcubs Area End Here -->
+<!-- Student Table Area Start Here -->
+<div class="card height-auto">
+    <div class="card-body">
+        <div class="heading-layout1">
+            <div class="item-title">
+                <h3>All TimeTables Data</h3>
+            </div>
+            <div class="dropdown">
+                <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown"
+                   aria-expanded="false">...</a>
+                <div class="dropdown-menu dropdown-menu-right">
+                    <a class="dropdown-item" href="#">
+                        <i class="fas fa-times text-orange-red"></i>Close
+                    </a>
+                    <a class="dropdown-item" href="#">
+                        <i class="fas fa-cogs text-dark-pastel-green"></i>Edit
+                    </a>
+                    <a class="dropdown-item" href="#">
+                        <i class="fas fa-redo-alt text-orange-peel"></i>Refresh
+                    </a>
+                </div>
+            </div>
+        </div>
+        <form class="mg-b-20">
+            <div class="row gutters-8">
+                <div class="col-4-xxxl col-xl-4 col-lg-3 col-12 form-group">
+                    <input type="text" placeholder="Search by Name ..." class="form-control">
+                </div>
+                <div class="col-4-xxxl col-xl-3 col-lg-3 col-12 form-group">
+                    <input type="text" placeholder="Search by Class ..." class="form-control">
+                </div>
+                <div class="col-1-xxxl col-xl-2 col-lg-3 col-12 form-group">
+                    <button type="submit" class="fw-btn-fill btn-gradient-yellow">SEARCH</button>
+                </div>
+                <div class="col-1-xxxl col-xl-2 col-lg-3 col-12 form-group">
+                    <a href="@Url.Action("Create", "TimeTables")" class="btn-fill-lmd radius-30 text-light shadow-dark-pastel-green bg-dark-pastel-green">Create</a>
+                </div>
+            </div>
+        </form>
+        <div class="table-responsive">
+            <table class="table display data-table text-nowrap">
+                <tr>
+                    <th>
+                        STT
+                    </th>
+                    <th>
+                        Class Name
+                    </th>
+                    <th>
+                        Subject Name
+                    </th>
+                    <th>
+                        Teacher Name
+                    </th>
+                    <th>
+                        Room Name
+                    </th>
+                    <th>
+                        Time In
+                    </th>
+                    <th>
+                        Time Out
+                    </th>
+                    <th>
+                        Day
+                    </th>
+                    <th>
+                        Is Acvite
+                    </th>
+                    <th></th>
+                </tr>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @i
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Class.ClassName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Subject.SubjectName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Teacher.TeacherName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Room.RoomName)
+                        </td>
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Day)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TimeIn)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TimeOut)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.IsAcvite)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Edit", "Edit", new { id = item.TimeID })
+                        </td>
+                    </tr>
+                    i++;
+                }
+
+            </table>
+        </div>
+    </div>
+</div>
+<!-- Student Table Area End Here -->

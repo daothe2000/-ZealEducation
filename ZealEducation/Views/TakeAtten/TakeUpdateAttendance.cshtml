@@ -1,0 +1,106 @@
+﻿@model IEnumerable<DataAccess.Attendance>
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/TeacherLayout.cshtml";
+}
+<link href="~/Content/AdminTempale/css2/styleTable.css" rel="stylesheet" />
+<!-- Breadcubs Area Start Here -->
+<div class="breadcrumbs-area">
+    <h3>Grades</h3>
+    <ul>
+        <li>
+            @Html.ActionLink("Back to List", "Index")
+        </li>
+        <li>Add Grade</li>
+    </ul>
+</div>
+<!-- Breadcubs Area End Here -->
+<!-- Class Table Area Start Here -->
+<div class="card height-auto">
+    <div class="card-body">
+        <div class="heading-layout1">
+            <div class="item-title">
+                <h3>Add Grades</h3>
+            </div>
+            <div class="dropdown">
+                <a class="dropdown-toggle" href="#" role="button"
+                   data-toggle="dropdown" aria-expanded="false">...</a>
+
+                <div class="dropdown-menu dropdown-menu-right">
+                    <a class="dropdown-item" href="#"><i class="fas fa-times text-orange-red"></i>Close</a>
+                    <a class="dropdown-item" href="#"><i class="fas fa-cogs text-dark-pastel-green"></i>Edit</a>
+                    <a class="dropdown-item" href="#"><i class="fas fa-redo-alt text-orange-peel"></i>Refresh</a>
+                </div>
+            </div>
+        </div>
+        @using (Html.BeginForm())
+        {
+            int i = 1;
+            @Html.AntiForgeryToken()
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <tr>
+                        <th>
+                            STT
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Student.StudentID)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Student.StudentName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.AttendanceType.AttendanceTypeName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Note)
+                        </th>
+                        <th></th>
+                    </tr>
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                <label>@i</label>
+                                <input type="text" id="AttendanceID" name="AttendanceID" value="@Html.DisplayFor(modelItem => item.AttendanceID)" style="display:none;" />
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Student.StudentID)
+                                <input type="text" id="StudentID" name="StudentID" value="@Html.DisplayFor(modelItem => item.StudentID)" style="display:none;" />
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Student.StudentName)
+                            </td>
+                            <td>
+                                @*@Html.DisplayFor(modelItem => item.AttendanceType.AttendanceTypeName)*@
+                                <select name="AttendanceTypeID" class="attenItem form-control" id="select_@Html.DisplayFor(modelItem => item.Student.StudentID)">
+                                    <option value="1">Present</option>
+                                    <option value="2">Absent</option>
+                                    <option value="3">Excused Absence</option>
+                                </select>
+                                <script>
+                        $('#select_@Html.DisplayFor(modelItem => item.Student.StudentID)').val('@Html.DisplayFor(modelItem => item.AttendanceType.AttendanceTypeID)');
+                                </script>
+                            </td>
+                            <td>
+                                @*@Html.DisplayFor(modelItem => item.Note)*@
+                                <input type="text" class="attenItem form-control" name="Note" id="Note" value="@Html.DisplayFor(modelItem => item.Note)" />
+                                @*@Html.EditorFor(modelItem => item.Note, new { htmlAttributes = new { @class = "form-control" } })*@
+                            </td>
+
+                        </tr>
+                        i++;
+                    }
+
+                </table>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <button type="submit" class="btn-fill-lg btn-gradient-yellow btn-hover-bluedark">Save</button>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+<!-- Class Table Area End Here -->

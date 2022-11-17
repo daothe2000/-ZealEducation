@@ -1,0 +1,202 @@
+﻿@model DataAccess.ExamSchedule
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<script src="~/Content/assets/js/toastr.min.js"></script>
+<link href="~/Content/AdminTempale/css/toastr.min.css" rel="stylesheet" />
+<input type="hidden" id="success" value="@TempData["success"]" />
+<input type="hidden" id="info" value="@TempData["info"]" />
+<input type="hidden" id="info" value="@TempData["warning"]" />
+<input type="hidden" id="error" value="@TempData["error"]" />
+<div class="content-body">
+    <section id="multiple-column-form">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="breadcrumbs-area">
+                        <h3>ExamSchdule</h3>
+                        <ul>
+                            <li>
+                                <a href="index.html">Home</a>
+                            </li>
+                            <li>Edit ExamSchdule</li>
+                        </ul>
+                    </div>
+                    <div class="card-body">
+                        @using (Html.BeginForm("Edit", "ExamSchedule", FormMethod.Post, new { @class = "form" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            @Html.HiddenFor(model => model.ExamScheduleID)
+                            <div class="row">
+                                <div class="col-xl-3 col-lg-6 col-12 form-group">
+                                    <label>Class Name *</label>
+                                    <div>
+
+                                        @Html.DropDownListFor(m => m.ClassId, (IEnumerable<SelectListItem>)ViewBag.ClassList as SelectList, "-- Select Class --", new { @class = "select2 form-control", @id = "ClassID" })
+                                        @Html.ValidationMessageFor(model => model.ClassId, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-3 col-lg-6 col-12 form-group">
+                                    <label>Subject Name *</label>
+                                    <div>
+                                        @Html.DropDownList("SubjectID", (IEnumerable<SelectListItem>)ViewBag.Subject_ID, null, new { @class = "form-control" })
+                                        @*@Html.DropDownList("SubjectID", (IEnumerable<SelectListItem>)ViewBag.SubjectID, null, new { @class = "form-control " })*@
+
+                                        @Html.ValidationMessageFor(model => model.SubjectID, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+
+
+                                <div class="col-xl-3 col-lg-6 col-12 form-group">
+                                    @Html.LabelFor(model => model.Examday)
+                                    <div>
+                                        @Html.EditorFor(model => model.Examday, new { htmlAttributes = new { @class = "form-control  air-datepicker", @id = "Examday", @placeholder = "DD-MM-YY" } })
+
+                                        @Html.ValidationMessageFor(model => model.Examday, "", new { @class = "text-danger" })
+
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-3 col-lg-6 col-12 form-group">
+                                    @Html.LabelFor(model => model.TimeIn)
+                                    <div>
+                                        @Html.EditorFor(model => model.TimeIn, new { htmlAttributes = new { @class = "form-control", @id = "TimeIn", @placeholder = "hh:ii" } })
+
+                                        @Html.ValidationMessageFor(model => model.TimeIn, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-3 col-lg-6 col-12 form-group">
+                                    @Html.LabelFor(model => model.TimeOut)
+                                    <div>
+                                        @Html.EditorFor(model => model.TimeOut, new { htmlAttributes = new { @class = "form-control", @id = "TimeOut", @placeholder = "hh:ii" } })
+                                        @Html.ValidationMessageFor(model => model.TimeOut, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-lg-6 col-12 form-group">
+                                    @Html.LabelFor(model => model.Note)
+                                    <div>
+
+
+                                        @Html.EditorFor(model => model.Note, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.Note, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-lg-6 col-12 form-group">
+                                    @Html.LabelFor(model => model.RoomID, "RoomID")
+                                    <div>
+                                        @Html.DropDownList("RoomID", null, htmlAttributes: new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.RoomID, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <button type="submit" class="btn-fill-lg btn-gradient-yellow btn-hover-bluedark">Save</button>
+                                    <button type="reset" class="btn-fill-lg bg-blue-dark btn-hover-yellow">Reset</button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div>
+        <a href="@Url.Action("Index","ExamSchedule")" class="dt-button btn btn-outline-primary waves-effect" tabindex="0" aria-controls="DataTables_Table_0" type="button"><span>Back To List</span></a>
+    </div>
+</div>
+
+
+
+@section Scripts{
+    <script src="~/Content/assets/js/ab.js"></script>
+    <script>
+
+
+        $(document).ready(function () {
+            $("#ClassID").change(function () {
+                $.get("/ExamSchedule/GetSubjectList", { ClassID: $("#ClassID").val() }, function (data) {
+                    $("#SubjectID").empty();
+                    $("#SubjectID").append("<option value=''>-- Select Subject --</option>");
+                    $.each(data, function (index, row) {
+                        $("#SubjectID").append("<option value='" + row.SubjectID + "'>" + row.SubjectName + "</option>");
+                    })
+                })
+            })
+            $('#TimeIn').flatpickr({
+                enableTime: true,
+                noCalendar: true,
+                dateFormat: "H:i"
+            });
+            $('#TimeOut').flatpickr({
+                enableTime: true,
+                noCalendar: true,
+                dateFormat: "H:i"
+            });
+            $('#Examday').flatpickr({
+                minDate: "today",
+
+                dateFormat: "d-m-Y",
+            });
+        })
+
+
+    </script>
+   
+        <script type="text/javascript">
+    var url = '@Url.Action("UpdateStatus")';
+    $('.toggle-checkbox').click(function () {
+
+        var isChecked = $(this).is(':checked'); //CheckBox checked - True or false
+        var id = $(this).data('id'); //Get the id of that specific checked row
+
+        $.post(url, { id: id, status: isChecked }, function (response) {
+            if (response) {
+                alert("Status changed");
+            }
+        })
+    });
+        </script>
+    
+    <script>
+        $(function () {
+            if ($('#success').val()) {
+                displayMessage($('#success').val(), 'success');
+            }
+            if ($('#info').val()) {
+                displayMessage($('#info').val(), 'info');
+            }
+            if ($('#warning').val()) {
+                displayMessage($('#warning').val(), 'warning');
+            }
+            if ($('#error').val()) {
+                displayMessage($('#error').val(), 'error');
+                $('#ClassID').prop('selectedIndex', 0);
+            }
+        });
+        var displayMessage = function (message, msgType) {
+            toastr.options = {
+                "closeButton": true,
+                "debug": false,
+                "positionClass": "toast-top-right",
+                "onClick": null,
+                "showDuration": "3000",
+                "hideDuration": "1000",
+                "timeOut": "8000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            };
+            toastr[msgType](message);
+        };
+    </script>
+}
+

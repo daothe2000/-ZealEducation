@@ -1,0 +1,171 @@
+﻿@model IEnumerable<DataAccess.Student>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<!-- Breadcubs Area Start Here -->
+<div class="breadcrumbs-area">
+    <h3>Students</h3>
+    <ul>
+        <li>
+            <a href="index.html">Home</a>
+        </li>
+        <li>All Students</li>
+    </ul>
+</div>
+
+<!-- Breadcubs Area End Here -->
+<!-- Student Table Area Start Here -->
+<div class="card height-auto">
+    <div class="card-body">
+        <div class="heading-layout1">
+            <div class="item-title">
+                <h3>All Students Data</h3>
+            </div>
+            <div class="dropdown">
+                <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown"
+                   aria-expanded="false">...</a>
+
+                <div class="dropdown-menu dropdown-menu-right">
+                    <a class="dropdown-item" href="#">
+                        <i class="fas fa-times text-orange-red"></i>Close
+                    </a>
+                    <a class="dropdown-item" href="#">
+                        <i class="fas fa-cogs text-dark-pastel-green"></i>Edit
+                    </a>
+                    <a class="dropdown-item" href="@Url.Action("Index","Students")">
+                        <i class="fas fa-redo-alt text-orange-peel"></i>Refresh
+                    </a>
+                </div>
+            </div>
+        </div>
+        <h4>@TempData["error"]</h4>
+        <form class="mg-b-20" action="/Students/Index" method="get">
+            <div class="row gutters-8">
+                <div class="col-4-xxxl col-xl-4 col-lg-3 col-12 form-group">
+                    <input type="text" placeholder="Search by StudentId ..." class="form-control" name="search_id">
+                </div>
+                <div class="col-4-xxxl col-xl-3 col-lg-3 col-12 form-group">
+                    <input type="search" placeholder="Search by Name ..." class="form-control" name="search_name">
+                </div>
+                <div class="col-1-xxxl col-xl-2 col-lg-3 col-12 form-group">
+                    <button type="submit" class="fw-btn-fill btn-gradient-yellow">SEARCH</button>
+                </div>
+                <div class="col-1-xxxl col-xl-2 col-lg-3 col-12 form-group">
+                    <a href="@Url.Action("Create","Students")" class="btn btn-success fw-btn-fill" role="button" style="min-width:110px">Add Student</a>
+                </div>
+            </div>
+
+        </form>
+
+        <div class="table-responsive">
+            <table class="table display data-table text-nowrap">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.StudentID)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.StudentName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Phone)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Address)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Email)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Gender)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Image)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Birthday)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Educationlevel)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Status)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.StudentID)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.StudentName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Phone)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Address)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Email)
+                            </td>
+                            <td>
+                                @if (@item.Gender)
+                                {
+                                    <h6>Male</h6>
+                                }
+                                else
+                                {
+                                    <h6>Female</h6>
+                                }
+                            </td>
+                            <td>
+                                <img src="~/Content/AdminTempale/img/figure/@item.Image" alt="Alternate Text" width="50" />
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Birthday)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Educationlevel)
+                            </td>
+                            <td>
+                                @if (@item.Status == true)
+                                {
+                                    <h6>Đang hoạt động</h6>
+                                }
+                                else
+                                {
+                                    <h6>Vô hiệu hóa</h6>
+                                }
+                            </td>
+                            <td>
+                                <div class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                        <span class="flaticon-more-button-of-three-dots"></span>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-right">
+                                        <a class="dropdown-item" href="@Url.Action("Delete", "Students", new { id = item.StudentID })">
+                                            <i class="fas fa-times text-orange-red" style="padding-right: 15px"></i>Delete
+                                        </a>
+                                        <a class="dropdown-item" href="@Url.Action("Edit", "Students", new { id = item.StudentID })">
+                                            <i class="fas fa-cogs text-dark-pastel-green" style="padding-right: 15px"></i>Edit
+                                        </a>
+
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+

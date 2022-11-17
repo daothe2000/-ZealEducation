@@ -1,0 +1,260 @@
+﻿
+
+@model IEnumerable<DataAccess.Teacher>
+
+@{
+    ViewBag.Title = "Index";
+}
+@section Styles{
+    <style>
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+            .switch input {
+                opacity: 0;
+                width: 0;
+                height: 0;
+            }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+            .slider:before {
+                position: absolute;
+                content: "";
+                height: 26px;
+                width: 26px;
+                left: 4px;
+                bottom: 4px;
+                background-color: white;
+                -webkit-transition: .4s;
+                transition: .4s;
+            }
+
+        input:checked + .slider {
+            background-color: #40b754;
+        }
+
+        input + .slider {
+            background-color: red;
+        }
+
+        input:focus + .slider {
+            box-shadow: 0 0 1px #2196F3;
+        }
+
+        input:checked + .slider:before {
+            -webkit-transform: translateX(26px);
+            -ms-transform: translateX(26px);
+            transform: translateX(26px);
+        }
+
+        /* Rounded sliders */
+        .slider.round {
+            border-radius: 34px;
+        }
+
+            .slider.round:before {
+                border-radius: 50%;
+            }
+    </style>
+}
+<div class="dashboard-content-one">
+    <!-- Breadcubs Area Start Here -->
+    <div class="breadcrumbs-area">
+        <h3>Teacher</h3>
+        <ul>
+            <li>
+                <a href="index.html">Home</a>
+            </li>
+            <li>All Teachers</li>
+        </ul>
+    </div>
+    <!-- Breadcubs Area End Here -->
+    <!-- Teacher Table Area Start Here -->
+    <div class="card height-auto">
+        <div class="card-body">
+            <div class="heading-layout1">
+                <div class="item-title">
+                    <h3>All Teachers Data</h3>
+                </div>
+
+            </div>
+            <form class="mg-b-20">
+                <div class="row gutters-8">
+                    <div class="col-4-xxxl col-xl-3 col-lg-3 col-12 form-group">
+                        @Html.DropDownList("FacultyID", new SelectList(ViewBag.Faculties, "FacultyID", "FacultyName"), "--Select Faculty Type--", new { @class = "form-control" })
+                    </div>
+                    <div class="col-4-xxxl col-xl-4 col-lg-3 col-12 form-group">
+                        <input type="text" placeholder="Search ..." class="form-control" name="name" value="@ViewBag.name">
+                    </div>
+
+                    <div class="col-2-xxxl col-xl-2 col-lg-3 col-12 form-group">
+                        <button type="submit" class="fw-btn-fill btn-gradient-yellow">SEARCH</button>
+                    </div>
+                    <div class="col-2-xxxl col-xl-3 col-lg-3 col-12 form-group">
+
+                        <a href="@Url.Action("Create","Teachers")" class="btn btn-success fw-btn-fill" role="button" style="min-width:110px">Add Teachers</a>
+                    </div>
+                </div>
+            </form>
+            <div class="table-responsive">
+                <table class="table display data-table text-nowrap">
+                    <thead>
+                        <tr>
+                            <th>
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input checkAll">
+                                    <label class="form-check-label">ID</label>
+                                </div>
+                            </th>
+
+                            <th>
+                                Teacher Name
+                            </th>
+                            <th>
+                                Phone
+                            </th>
+                            <th>
+                                Address
+                            </th>
+                            <th>
+                                Gender
+                            </th>
+                            <th>
+                                Email
+                            </th>
+                            <th>
+                                Image
+                            </th>
+                            <th>
+                                Birthday
+                            </th>
+                            <th>
+                                nation
+                            </th>
+                            <th>
+                                degree
+                            </th>
+                            <th>
+                                Status
+                            </th>
+
+                            <th>
+                                Faculty Name
+                            </th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input">
+                                        <label class="form-check-label">@item.TeacherID</label>
+                                    </div>
+                                </td>
+
+
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.TeacherName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Phone)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Address)
+                                </td>
+                                <td>
+                                    <span> @(item.Gender ? "Male" : "female")</span>
+                                </td>
+
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Email)
+                                </td>
+                                <td>
+                                    <img src="@item.Image" width="30" height="30" />
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Birthday)
+                                </td>
+
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Nation)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Degree)
+                                </td>
+                                <td>
+                                    <label class="switch">
+                                        <input type="checkbox" class="toggle-checkbox" data-id="@item.TeacherID" @(item.Status ? "checked" : "")>
+                                        <span class="slider round"></span>
+                                    </label>
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Faculty.FacultyName)
+                                </td>
+                                <td>
+                                    <div class="dropdown">
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                            <span class="flaticon-more-button-of-three-dots"></span>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-right">
+                                            <a class="dropdown-item" href="@Url.Action("Delete", "Teachers", new { id = item.TeacherID })"><i class="fas fa-times text-orange-red"></i>Delete</a>
+                                            <a class="dropdown-item" href="@Url.Action("Edit", "Teachers", new { id = item.TeacherID })"><i class="fas fa-cogs text-dark-pastel-green"></i>Edit</a>
+
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- Teacher Table Area End Here -->
+
+</div>
+@section scripts{
+    <script type="text/javascript">
+    var url = '@Url.Action("UpdateStatus")';
+    $('.toggle-checkbox').click(function () {
+
+        var isChecked = $(this).is(':checked'); //CheckBox checked - True or false
+        var id = $(this).data('id'); //Get the id of that specific checked row
+
+        $.post(url, { id: id, status: isChecked }, function (response) {
+            if (!response.result) {
+
+                toastr.success('Create successful!', 'Success!', {
+                    closeButton: true,
+                    tapToDismiss: false
+                });
+
+            } else {
+                toastr.error('Create failed!', 'Error!', {
+
+                    closeButton: true,
+                    tapToDismiss: false
+                });
+            }
+        })
+    });
+    </script>
+}

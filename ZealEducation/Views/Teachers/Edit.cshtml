@@ -1,0 +1,163 @@
+﻿@model DataAccess.Teacher
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_layout.cshtml";
+}
+
+
+
+
+<div class="content-body">
+    <section id="multiple-column-form">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="breadcrumbs-area">
+                        <h3>Teacher</h3>
+                        <ul>
+                            <li>
+                                <a href="index.html">Home</a>
+                            </li>
+                            <li>Edit Teacher</li>
+                        </ul>
+                    </div>
+                    <div class="card-body">
+                        @using (Html.BeginForm("Edit", "Teachers", FormMethod.Post, new { @class = "form" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            @Html.HiddenFor(model => model.TeacherID)
+                            <div class="row">
+                                <div class="col-md-6 col-12">
+                                    <div class="form-group">
+                                        <label for="ShopName">Teacher name</label>
+                                        @Html.EditorFor(model => model.TeacherName, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.TeacherName, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-12">
+                                    <div class="form-group">
+                                        <label for="ServiceId">Phone</label>
+
+                                        @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-12">
+                                    <div class="form-group">
+                                        <label for="Address">Address</label>
+                                        @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-12">
+                                    <div class="form-group">
+                                        <label for="Phone">Password</label>
+                                        @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", @type = "password" } })
+                                        @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-12">
+                                    <div class="form-group">
+                                        <label for="Email">Email</label>
+                                        @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 col-12">
+                                    <div class="form-group">
+                                        <label class="form-label" for="first-name-vertical">Image</label>
+                                        <fieldset>
+                                            <div class="input-group">
+                                                <button class="btn btn-outline-primary waves-effect btn-banner__movie" id="btn-image-image" type="button" style="border-top-right-radius: 0;border-bottom-right-radius: 0;">
+                                                    Choose
+                                                </button>
+                                                @Html.EditorFor(model => model.Image, new { htmlAttributes = new { @class = "form-control", @id = "edit-img-image", @placeholder = "Button on left" } })
+                                            </div>
+                                        </fieldset>
+                                        @Html.ValidationMessageFor(model => model.Image, "", new { @class = "text-danger" })
+                                        
+                                    </div>
+                                </div>
+
+
+                                <div class="col-md-6 col-12">
+                                    <div class="form-group">
+                                        <label for="Meta_title">Birthday</label>
+                                        @Html.EditorFor(model => model.Birthday, new { htmlAttributes = new { @class = "form-control  air-datepicker", @id = "fp-start-time", @placeholder = "DD-MM-YY" } })
+                                       
+                                        @Html.ValidationMessageFor(model => model.Birthday, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-12">
+                                    <div class="form-group">
+                                        <label for="Meta_keyword">Nation</label>
+                                        @Html.EditorFor(model => model.Nation, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.Nation, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-12">
+                                    <div class="form-group">
+                                        <div class="mb-1 ">
+                                            <label for="Meta_description">Degree</label>
+                                            @Html.EditorFor(model => model.Degree, new { htmlAttributes = new { @class = "form-control" } })
+                                            @Html.ValidationMessageFor(model => model.Degree, "", new { @class = "text-danger" })
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6 col-12">
+                                    <div class="form-group">
+                                        <div class="demo-inline-spacing">
+                                            <label for="Status"><b>Gender</b></label>
+                                            @Html.RadioButtonFor(x => x.Gender, "true") <span>male</span>
+                                            @Html.RadioButtonFor(x => x.Gender, "false") <span>Female</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-12">
+                                    <div class="form-group">
+                                        <label for="Description">Faculty</label>
+                                        @Html.DropDownList("FacultyID", (IEnumerable<SelectListItem>)ViewBag.Faculty_ID, "-- Select --", new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.FacultyID, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <button type="submit" class="btn-fill-lg btn-gradient-yellow btn-hover-bluedark">Save</button>
+                                    <button type="reset" class="btn-fill-lg bg-blue-dark btn-hover-yellow">Reset</button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div>
+        <a href="@Url.Action("Index","TeacherTables")" class="dt-button btn btn-outline-primary waves-effect" tabindex="0" aria-controls="DataTables_Table_0" type="button"><span>Back To List</span></a>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).on("click", "#btn-image-image", function () {
+
+            var finder = new CKFinder();
+            finder.selectActionFunction = function (fileUrl) {
+
+                $("#edit-img-image").val(fileUrl);
+            };
+            finder.popup();
+        });
+    </script>
+
+}
+
+
+
+
+
+

@@ -1,0 +1,215 @@
+﻿@model DataAccess.TimeTable
+
+@{
+    ViewBag.Title = "Create";
+}
+<script src="~/Scripts/toastr.min.js"></script>
+<input type="hidden" id="success" value="@TempData["success"]" />
+<input type="hidden" id="info" value="@TempData["info"]" />
+<input type="hidden" id="info" value="@TempData["warning"]" />
+<input type="hidden" id="error" value="@TempData["error"]" />
+<!-- Breadcubs Area Start Here -->
+<div class="breadcrumbs-area">
+    <h3>Time Tables</h3>
+    <ul>
+        <li>
+            @Html.ActionLink("Back to List", "Index")
+        </li>
+        <li>Add Time Table</li>
+    </ul>
+</div>
+<!-- Breadcubs Area End Here -->
+<!-- Admit Form Area Start Here -->
+<div class="card height-auto">
+    <div class="card-body">
+        <div class="heading-layout1">
+            <div class="item-title">
+                <h3>Add New Time Table</h3>
+            </div>
+            <div class="dropdown">
+                <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown"
+                   aria-expanded="false">...</a>
+
+                <div class="dropdown-menu dropdown-menu-right">
+                    <a class="dropdown-item" href="#">
+                        <i class="fas fa-times text-orange-red"></i>Close
+                    </a>
+                    <a class="dropdown-item" href="#">
+                        <i class="fas fa-cogs text-dark-pastel-green"></i>Edit
+                    </a>
+                    <a class="dropdown-item" href="#">
+                        <i class="fas fa-redo-alt text-orange-peel"></i>Refresh
+                    </a>
+                </div>
+            </div>
+        </div>
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal new-added-form">
+                <div class="row">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <div class="col-xl-3 col-lg-6 col-12 form-group">
+                        <label>Class Name *</label>
+                        <div>
+                            @if (ViewBag.ClassList != null)
+                            {
+                                @Html.DropDownListFor(m => m.ClassID, (IEnumerable<SelectListItem>)ViewBag.ClassList as SelectList, "-- Select Class --", new { @class = "select2 form-control" });
+
+                            }
+
+                            @*@Html.DropDownList("ClassID", null, htmlAttributes: new { @class = "form-control" })*@
+                            @Html.ValidationMessageFor(model => model.ClassID, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="col-xl-3 col-lg-6 col-12 form-group">
+                        <label>Subject Name *</label>
+                        <div>
+                            @*@Html.DropDownListFor(m => m.SubjectID, new SelectList(""), "-- Select Subject --", new { @class = "form-control" })*@
+                            <select id="SubjectID" name="SubjectID" class="select2 form-control">
+                                <option value="">Select Subject</option>
+                            </select>
+                            @*@Html.DropDownList("SubjectID", null, htmlAttributes: new { @class = "form-control" })*@
+                            @Html.ValidationMessageFor(model => model.SubjectID, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="col-xl-3 col-lg-6 col-12 form-group">
+                        <label>Teacher Name *</label>
+                        <div>
+                            <select id="TeacherID" name="TeacherID" class="select2 form-control">
+                                <option value="">Select Teacher</option>
+                            </select>
+                            @*@Html.DropDownList("TeacherID", null, htmlAttributes: new { @class = "form-control" })*@
+                            @Html.ValidationMessageFor(model => model.TeacherID, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="col-xl-3 col-lg-6 col-12 form-group">
+                        <label>Day *</label>
+                        <div>
+                            @*@Html.EditorFor(model => model.Day, new { htmlAttributes = new { @class = "form-control" } })*@
+                            <input type="text" id="Day" name="Day" placeholder="dd/mm/yyyy" class="form-control air-datepicker DayTimeTbl"
+                                   data-position='bottom right' autocomplete="off">
+                            <i class="far fa-calendar-alt"></i>
+                            @Html.ValidationMessageFor(model => model.Day, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="col-xl-3 col-lg-6 col-12 form-group">
+                        <label>Time In *</label>
+                        <div>
+                            <input type="text" id="TimeIn" name="TimeIn" class="form-control start-time air-datepicker" data-position='bottom right' data-timepicker="true" autocomplete="off">
+                            <i class="far fa-clock"></i>
+                            @*@Html.EditorFor(model => model.TimeIn, new { htmlAttributes = new { @class = "form-control" } })*@
+                            @Html.ValidationMessageFor(model => model.TimeIn, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="col-xl-3 col-lg-6 col-12 form-group">
+                        <label>Time Out *</label>
+                        <div>
+                            <input type="text" id="TimeOut" name="TimeOut" class="form-control end-time air-datepicker" data-position='bottom right' data-timepicker="true" autocomplete="off">
+                            <i class="far fa-clock"></i>
+                            @*@Html.EditorFor(model => model.TimeOut, new { htmlAttributes = new { @class = "form-control" } })*@
+                            @Html.ValidationMessageFor(model => model.TimeOut, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="col-xl-3 col-lg-6 col-12 form-group">
+                        <label>Room Name *</label>
+                        <div>
+                            @Html.DropDownList("RoomId", null, htmlAttributes: new { @class = "form-control select2" })
+                            @Html.ValidationMessageFor(model => model.RoomId, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="col-12 form-group mg-t-8">
+                        <button type="submit" value="Create" class="btn-fill-lg btn-gradient-yellow btn-hover-bluedark">Save</button>
+                        <button type="reset" class="btn-fill-lg bg-blue-dark btn-hover-yellow">Reset</button>
+                    </div>
+                </div>
+            </div>
+        }
+
+    </div>
+</div>
+
+
+
+<script>
+    //$(document).ready(function () {
+    //    $("#ClassID").change(function () {
+    //        var classID = $("#ClassID").val();
+    //        $.ajax({
+    //            type: "post",
+    //            url: "/TimeTables/GetSubjectList?ClassID=" + classID,
+    //            contentType: "html",
+    //            success: function (response) {
+    //                $("#SubjectID").empty();
+    //                $("#SubjectID").append(response);
+    //            }
+    //        })
+    //    })
+    //})
+
+    $(document).ready(function () {
+        $("#ClassID").change(function () {
+            $.get("/TimeTables/GetSubjectList", { ClassID: $("#ClassID").val() }, function (data) {
+                $("#SubjectID").empty();
+                $("#SubjectID").append("<option value=''>-- Select Subject --</option>");
+                $.each(data, function (index, row) {
+                    $("#SubjectID").append("<option value='" + row.SubjectID + "'>" + row.SubjectName + "</option>");
+                })
+            })
+        })
+    })
+
+    $(document).ready(function () {
+        $("#SubjectID").change(function () {
+            $.get("/TimeTables/GetTeacherList", { SubjectID: $("#SubjectID").val() }, function (data) {
+                $("#TeacherID").empty();
+                $("#TeacherID").append("<option value=''>-- Select Teacher --</option>");
+                $.each(data, function (index, row) {
+                    $("#TeacherID").append("<option value='" + row.TeacherID + "'>" + row.TeacherName + "</option>");
+                })
+            })
+        })
+    })
+</script>
+<script>
+    $(function () {
+        if ($('#success').val()) {
+            displayMessage($('#success').val(), 'success');
+        }
+        if ($('#info').val()) {
+            displayMessage($('#info').val(), 'info');
+        }
+        if ($('#warning').val()) {
+            displayMessage($('#warning').val(), 'warning');
+        }
+        if ($('#error').val()) {
+            displayMessage($('#error').val(), 'error');
+            $('#ClassID').prop('selectedIndex', 0);
+        }
+    });
+    var displayMessage = function (message, msgType) {
+        toastr.options = {
+            "closeButton": true,
+            "debug": false,
+            "positionClass": "toast-top-right",
+            "onClick": null,
+            "showDuration": "3000",
+            "hideDuration": "1000",
+            "timeOut": "8000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        };
+        toastr[msgType](message);
+    };
+</script>

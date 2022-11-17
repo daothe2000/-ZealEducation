@@ -1,0 +1,103 @@
+﻿
+@model IEnumerable<DataAccess.RelParentStudent>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="form-horizontal">
+    <!-- Student Table Area Start Here -->
+    <div class="card height-auto">
+        <div class="card-body">
+            <div class="heading-layout1">
+                <div class="item-title">
+                    <h3>Display by Parent</h3>
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <form class="mg-b-20" action="/ParentStudent/Index" method="get">
+                <div class="row gutters-8">
+                    <div class="col-6-xxxl col-xl-6 col-lg-5 col-12 form-group">
+                        <input type="text" placeholder="Search by Class name ..." class="form-control" name="search_class" value="@ViewBag.name">
+                    </div>
+
+                    <div class="col-3-xxxl col-xl-3 col-lg-4 col-12 form-group">
+                        <button type="submit" class="fw-btn-fill btn-gradient-yellow">SEARCH</button>
+                    </div>
+                    <div class="col-3-xxxl col-xl-3 col-lg-3 col-12 form-group">
+                        <a href="@Url.Action("Create","ParentStudent")" class="btn btn-success fw-btn-fill" role="button" style="min-width:110px">Add Parent Student</a>
+                    </div>
+                </div>
+            </form>
+            <div class="table-responsive">
+                <table class="table display data-table text-nowrap">
+                    <thead>
+                        <tr>
+
+                            <th>
+                                StudentID
+                            </th>
+                            <th>
+                                Student Name
+                            </th>
+                            <th>
+                                Phone Student
+                            </th>
+                            <th>
+                                Parent Name
+                            </th>
+                            <th>
+                                Phone Parent
+                            </th>
+                            <th>
+                                Address
+                            </th>
+                            <th>
+                                Email
+                            </th>
+                            <th>RelationWithStudent</th>
+                            <th> Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var student in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => student.Student.StudentID)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => student.Student.StudentName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => student.Student.Phone)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => student.Parent.ParentName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => student.Parent.Phone)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => student.Student.Address)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => student.Student.Email)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => student.RelationWithStudent)
+                                </td>
+                                <td>
+                                    @Html.ActionLink("Delete", "Delete", new { id = student.Id }, new { @class = "btn btn-danger" })
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+

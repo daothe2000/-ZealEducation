@@ -1,0 +1,284 @@
+﻿
+
+@{
+    ViewBag.Title = "Index";
+}
+
+@section Styles{
+    <link href="~/Content/AdminTempale/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/AdminTempale/css/bootstrap.extended.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/AdminTempale/css/toastr.min.css" rel="stylesheet" />
+    <style>
+        .panel-heading {
+            background: #f6f6f6;
+            border-radius: 5px 5px 0 0;
+            position: relative;
+            border-bottom: 2px solid #ffbd2e;
+            padding: 10px 15px;
+        }
+        .select2-container {
+            display: block !important;
+        }
+        .panel-title {
+            color: #33353F;
+            font-weight: 400;
+            line-height: 20px;
+            padding: 0;
+            text-transform: none;
+            font-size: 17px;
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+    </style>
+
+
+}
+<div class="dashboard-content-one">
+    <!-- Breadcubs Area Start Here -->
+    <div class="breadcrumbs-area">
+        <h3>Teacher Subject</h3>
+        <ul>
+            <li>
+                <a href="index.html">Home</a>
+            </li>
+            <li>All Teacher Subject</li>
+        </ul>
+    </div>
+    <!-- Breadcubs Area End Here -->
+    <!-- Teacher Table Area Start Here -->
+    <div class="card height-auto">
+        <div class="card-body">
+            <div class="heading-layout1">
+                <div class="item-title">
+                    <h3>All Teacher Subject Data</h3>
+                </div>
+                
+            </div>
+            <form class="mg-b-20">
+                <div class="row gutters-8">
+
+                    <div class="col-4-xxxl col-xl-4 col-lg-3 col-12 form-group">
+                        <input type="text" placeholder="Search ..." class="form-control" name="name" value="@ViewBag.name">
+                    </div>
+
+                    <div class="col-2-xxxl col-xl-2 col-lg-3 col-12 form-group">
+                        <button type="submit" class="fw-btn-fill btn-gradient-yellow">SEARCH</button>
+                    </div>
+                    <div class="col-2-xxxl col-xl-3 col-lg-3 col-12 form-group">
+                        
+                        <a href="@Url.Action("Create","TeacherSubject")" class="btn btn-success fw-btn-fill" role="button" style="min-width:110px">Add Teacher Subject</a>
+                       
+                    </div>
+                </div>
+            </form>
+            <div class="table-responsive">
+                <table class="table display data-table text-nowrap">
+                    <thead>
+                        <tr>
+
+
+                           
+                            <th>
+                                TeacherName
+                            </th>
+                            <th>
+                                SubjectName
+                            </th>
+
+
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in ViewBag.TopMovie)
+                        {
+                            var a = (IEnumerable<DataAccess.MultiSubjectTeacher>)@ViewBag.MovieTypes;
+                            var res = a.Where(x=>x.TeacherID.Equals(item.teacherid));
+                            <tr>
+
+
+                               
+                                <td>
+                                    @item.TeacherName
+                                </td>
+                                <td>
+                                    @foreach (var item1 in res)
+                                    {
+                                        <div>
+                                            - @item1.Subject.SubjectName
+                                        </div>
+
+                                    }
+                                </td>
+
+                                <td>
+                                    <div class="dropdown">
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                            <span class="flaticon-more-button-of-three-dots"></span>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-right">
+                                            <a class="dropdown-item btn-delete" data-id="@item.teacherid"><i class="fas fa-times text-orange-red"></i>Delete</a>
+                                            <a class="dropdown-item btn-edit" data-id="@item.teacherid"><i class="fas fa-cogs text-dark-pastel-green"></i>Edit</a>
+
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- Teacher Table Area End Here -->
+
+</div>
+@section scripts{
+    <script src="~/Content/assets/js/sweetalert.min.js"></script>
+    <script src="~/Scripts/mustache.min.js"></script>
+    <script src="~/Content/assets/js/Select2.min.js"></script>
+    <script>
+        $('.btn-edit').off('click').on('click', function () {
+            $('#modalAddUpdate').modal('show');
+            var id = $(this).data('id');
+            GetDataById(id);
+        });
+        $(document).ready(function () {
+            $('.teacher').select2({
+                placeholder: "Select a Subject",
+                allowClear: true
+            });
+
+        });
+
+        function GetDataById(_id) {
+
+            $.ajax({
+                url: '/TeacherSubject/GetById',
+                type: 'GET',
+                data: { id: _id },
+                dataType: 'json',
+                success: function (response) {
+                    
+                    $('#esection_id').val(response.teacherID);
+                    $.ajax({
+                        url: '/TeacherSubject/GetById1',
+                        type: 'GET',
+                        data: { id: response.facultyID },
+                        dataType: 'json',
+                        success: function (res) {
+                            $("#select-Subject").html('');
+                            $.each(res, function (i, item) {
+                                $.ajax({
+                                    url: '/TeacherSubject/GetById2',
+                                    type: 'GET',
+                                    data: { id: response.teacherID, subject: item.subjectID },
+                                    dataType: 'json',
+                                    success: function (rese) {
+
+
+                                        $("#select-Subject").append(
+                                            '<option value="' + item.subjectID + '" ' + (rese != 0 ? 'selected' : '') + ' >' + item.subjectName + '</option>');
+
+                                    }
+                                });
+                            });
+                        }
+                    });
+
+
+                }
+            });
+        }
+        $(document).on('click', '#btnSave', function () {
+            if (ValidateScreening()) {
+                var _genre = $('.teacher').val();
+             
+                var _teacher = $('#esection_id').val();
+
+                Edit(_teacher, _genre);
+            }
+        });
+
+        function Edit(Teacher, _subjectIDs) {
+            if (_subjectIDs != null && _subjectIDs.length > 0) {
+                $.ajax({
+                    url: '/TeacherSubject/Edit',
+                    type: 'POST',
+                    data: JSON.stringify({teacherID: Teacher, subjectIDs: _subjectIDs }),
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (res) {
+
+                        if (res.success) {
+                            toastr.success('Update successful!', 'Success!', {
+                                closeButton: true,
+                                tapToDismiss: false
+                            });
+                        } else if (!res.success) {
+                            toastr.error('Update failed!', 'Error!', {
+                                closeButton: true,
+                                tapToDismiss: false
+                            });
+                        }
+                        location.reload();
+                    }
+
+                });
+
+            }
+        }
+        $(document).on('click', '.btn-delete', function () {
+            var id = $(this).data('id');
+
+            DeleteMultiple(id);
+        });
+        function DeleteMultiple(id) {
+            $.ajax({
+                url: '/TeacherSubject/DeleteMultiple',
+                type: 'POST',
+                data: { id: id },
+
+                success: function (res) {
+
+                    if (res.success) {
+
+
+                        toastr.success('Delete successful!', 'Success!', {
+
+
+                            closeButton: true,
+                            tapToDismiss: false
+                        });
+
+                    } else {
+                        toastr.error('Delete failed!', 'Error!', {
+                            closeButton: true,
+                            tapToDismiss: false
+                        });
+                    }
+
+                    location.reload();
+                }
+            });
+        }
+        function ValidateScreening() {
+            var check = true;
+
+
+            var _genre = $('.teacher').val();
+            if (_genre.length == 0 || _genre == null) {
+                $('.teacher').parent().next().html('Subject cannot be empty!!');
+                check = false;
+            } else {
+                $('.teacher').parent().next().html('');
+            }
+
+
+
+            return check;
+        }
+    </script>
+}
+
+@RenderPage("_AddUpdateModal.cshtml")

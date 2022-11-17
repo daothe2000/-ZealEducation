@@ -1,0 +1,252 @@
+﻿@model IEnumerable<DataAccess.Class>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="dashboard-content-one">
+    <!-- Breadcubs Area Start Here -->
+    <div class="breadcrumbs-area">
+        <h3>All Class</h3>
+        <ul>
+            <li>
+                <a href="index.html">Home</a>
+            </li>
+            <li>Class</li>
+        </ul>
+    </div>
+    <!-- Breadcubs Area End Here -->
+    <!-- All Subjects Area Start Here -->
+    <div class="row">
+        <div class="col-4-xxxl col-12">
+            <div class="card height-auto">
+                <div class="card-body">
+                    <div class="heading-layout1">
+                        <div class="item-title">
+                            <h3>New Class</h3>
+                        </div>
+                        <div class="dropdown">
+                            <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown"
+                               aria-expanded="false">...</a>
+
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-cogs text-dark-pastel-green"></i>Edit
+                                </a>
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-redo-alt text-orange-peel"></i>Refresh
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <form class="new-added-form">
+                        <div class="row">
+                            <div class="col-12-xxxl col-lg-6 col-12 form-group">
+                                <label id="id">Class Id *</label>
+                                <input type="text" id="class_Id" class="form-control">
+                            </div>
+                            <div class="col-12-xxxl col-lg-6 col-12 form-group">
+                                <label>Class Name *</label>
+                                <input type="text" id="class_name" class="form-control">
+                            </div>
+                            <div class="col-12-xxxl col-lg-6 col-12 form-group">
+                                <label>Quantity *</label>
+                                <input type="number" placeholder="" id="quantity" class="form-control">
+                            </div>
+                            
+                            <div class="col-12-xxxl col-lg-6 col-12 form-group">
+                                <label>FacultyId</label>
+                                @Html.DropDownList("sub", null, "-- select one sub --", new { @class = "form-control" })
+                            </div>
+                            <div class="col-12 form-group mg-t-8">
+                                <button type="button" id="Save" class="btn-fill-lg btn-gradient-yellow btn-hover-bluedark">Save</button>
+                                <button type="reset" class="btn-fill-lg bg-blue-dark btn-hover-yellow">Reset</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-8-xxxl col-12">
+            <div class="card height-auto">
+                <div class="card-body">
+                    <div class="heading-layout1">
+                        <div class="item-title">
+                            <h3>All Class</h3>
+                        </div>
+                    </div>
+                    <h4>@TempData["error"]</h4>
+                    <form class="mg-b-20" action="/Classes/Index" method="get">
+                        <div class="row gutters-8">
+                            <div class="col-lg-8 col-12 form-group" style="margin-left:60px">
+                                <input type="text" placeholder="Search by Subject name ..." class="form-control" name="search_name">
+                            </div>
+                            <div class="col-lg-2 col-12 form-group">
+                                <button type="submit"
+                                        class="fw-btn-fill btn-gradient-yellow" id="Search">
+                                    SEARCH
+                                </button>
+                            </div>
+
+                        </div>
+                    </form>
+                    <div class="table-responsive">
+                        <table class="table display data-table text-nowrap list_sbj" id="list_sbj">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.ClassID)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.ClassName)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.StuQuantityMax)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.Faculty.FacultyName)
+                                    </th>
+                                    
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr id="row">
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.ClassID)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.ClassName)
+                                        </td>
+
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.StuQuantityMax)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.Faculty.FacultyName)
+                                        </td>
+                                        <td>
+                                            <div class="dropdown">
+                                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                                    <span class="flaticon-more-button-of-three-dots"></span>
+                                                </a>
+                                                <div class="dropdown-menu dropdown-menu-right">
+                                                    <a class="dropdown-item" href="@Url.Action("Delete", "Classes", new { id = item.ClassID })">
+                                                        <i class="fas fa-times text-orange-red" style="padding-right: 15px"></i>Delete
+                                                    </a>
+                                                   
+
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <script>
+//const { type } = require("jquery");
+
+        $(document).ready(function () {
+            var checkEdit = false;
+
+            function AjaxCall(url, data, type) {
+                return $.ajax({
+                    url: url,
+                    type: type ? type : 'GET',
+                    data: data,
+                    contentType: 'application/json'
+                });
+            };
+
+            $("#Save").click(function () {
+                var facuOjb = {
+                    ClassID: $("#class_id").val(),
+                    ClassName: $("#class_name").val(),
+                    quantity: $("#quantity").val(),
+                    FacultyId: $("#sub").val()
+                };
+
+                if (checkEdit == false) {
+                    $.ajax({
+                        url: "@Url.Action("CreateData", "Classes")",
+                        data: {
+                            ClassID: $("#class_Id").val(),
+                            ClassName: $("#class_name").val(),
+                            StuQuantityMax: $("#quantity").val(),
+                            status: $("#Status").val(),
+                            FacultyId: $("#sub").val()
+                        },
+                        type: "POST",
+                        success: function (result) {
+                            console.log(result);
+                            console.log("oke thanh cong");
+                            window.location = "https://localhost:44389/Classes";
+
+                        },
+                        error: function (e) {
+                            alert('class id already exists');
+                        }
+                    });
+                } else {
+                    $.ajax({
+                        url: "@Url.Action("EditData", "Classes")",
+                        data: {
+                            ClassID: $("#class_Id").val(),
+                            ClassName: $("#class_name").val(),
+                            StuQuantityMax: $("#quantity").val(),
+                            Status: 1,
+                            FacultyId: $("#sub").val()
+                        },
+                        type: "POST",
+                        success: function (result) {
+                            console.log(result);
+                            console.log("oke thanh cong");
+                            window.location = "https://localhost:44389/Classes";
+
+                        },
+                        error: function (e) {
+                            alert("fail");
+                        }
+                    });
+                }
+            });
+
+            $("table tbody #row").click(function () {
+                $(this).addClass('selected').siblings().removeClass('selected');
+                var value = $(this).find('td:first').html();
+                var parseInt = value.replace('\n', '');
+                var ac = parseInt.replace('\n', '');
+                var id = ac.trim(); 
+                $.ajax({
+                    type: "GET",
+                    url: "@Url.Action("getByIdToJson", "Classes")",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: { id: id },
+                    success: function (rs) {
+                        $("#id").hide(),
+                        $("#class_Id").val(rs.ClassID).hide(),
+                        $("#class_name").val(rs.ClassName);
+                        $("#quantity").val(rs.StuQuantityMax);
+                        $("#Status").val(rs.Status);
+                        $("#sub").val(rs.FacultyId);
+                        checkEdit = true;
+                    },
+                    error: function (ex) {
+                        alert("Fail");
+
+                    }
+                });
+            });
+        });
+
+    </script>

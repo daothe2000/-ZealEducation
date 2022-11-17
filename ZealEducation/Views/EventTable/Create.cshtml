@@ -1,0 +1,114 @@
+﻿
+@model DataAccess.Event
+
+@{
+    ViewBag.Title = "Create";
+}
+<div class="breadcrumbs-area">
+    <h3>Event</h3>
+    <ul>
+        <li>
+            @Html.ActionLink("Back to List", "Index")
+        </li>
+        <li>Add Event</li>
+    </ul>
+</div>
+<!-- Breadcubs Area End Here -->
+<!-- Admit Form Area Start Here -->
+<div class="card height-auto">
+    <div class="card-body">
+        <div class="heading-layout1">
+            <div class="item-title">
+                <h3>Add New Event</h3>
+            </div>
+
+        </div>
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal new-added-form">
+                <div class="row">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <div class="col-xl-3 col-lg-6 col-12 form-group">
+                        @Html.LabelFor(model => model.EventName)
+                        <div>
+                            @Html.EditorFor(model => model.EventName, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.EventName, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="col-xl-3 col-lg-6 col-12 form-group">
+                        @Html.LabelFor(model => model.startDate)
+                        <div>
+                            @*@Html.EditorFor(model => model.Day, new { htmlAttributes = new { @class = "form-control" } })*@
+                            <input type="text" id="startDate" name="startDate" placeholder="dd/mm/yyyy" class="form-control air-datepicker DayTimeTbl"
+                                   data-position='bottom right'>
+                            <i class="far fa-calendar-alt"></i>
+                            @Html.ValidationMessageFor(model => model.startDate, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="col-xl-3 col-lg-6 col-12 form-group">
+                        @Html.LabelFor(model => model.endDate)
+                        <div>
+                            @*@Html.EditorFor(model => model.Day, new { htmlAttributes = new { @class = "form-control" } })*@
+                            <input type="text" id="endDate" name="endDate" placeholder="dd/mm/yyyy" class="form-control air-datepicker DayTimeTbl"
+                                   data-position='bottom right'>
+                            <i class="far fa-calendar-alt"></i>
+                            @Html.ValidationMessageFor(model => model.endDate, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+
+                    <div class="col-xl-3 col-lg-6 col-12 form-group">
+                        @Html.LabelFor(model => model.note)
+                        <div>
+                            <textarea class="form-control" name="note" rows="3" placeholder="Note..."></textarea>
+
+                            @*@Html.EditorFor(model => model.TimeOut, new { htmlAttributes = new { @class = "form-control" } })*@
+                            @Html.ValidationMessageFor(model => model.note, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+
+                    <div class="col-12 form-group mg-t-8">
+                        <button type="submit" value="Create" class="btn-fill-lg btn-gradient-yellow btn-hover-bluedark">Save</button>
+                        <button type="reset" class="btn-fill-lg bg-blue-dark btn-hover-yellow">Reset</button>
+                    </div>
+                </div>
+            </div>
+        }
+
+    </div>
+</div>
+
+
+@section Scripts{
+
+    <script src="~/Content/assets/js/ab.js"></script>
+    <script>
+
+
+        $(document).ready(function () {
+
+
+            $('#startDate').flatpickr({
+                minDate: "today",
+
+                dateFormat: "d-m-Y",
+            });
+            $('#endDate').flatpickr({
+                minDate: "today",
+
+                dateFormat: "d-m-Y",
+            });
+        })
+
+
+    </script>
+
+}

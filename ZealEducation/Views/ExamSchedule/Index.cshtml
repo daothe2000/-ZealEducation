@@ -1,0 +1,260 @@
+﻿@model IEnumerable<DataAccess.ExamSchedule>
+
+@{
+    ViewBag.Title = "Index";
+}
+@section Styles{
+    <style>
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+            .switch input {
+                opacity: 0;
+                width: 0;
+                height: 0;
+            }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+            .slider:before {
+                position: absolute;
+                content: "";
+                height: 26px;
+                width: 26px;
+                left: 4px;
+                bottom: 4px;
+                background-color: white;
+                -webkit-transition: .4s;
+                transition: .4s;
+            }
+
+        input:checked + .slider {
+            background-color: #40b754;
+        }
+
+        input + .slider {
+            background-color: red;
+        }
+
+        input:focus + .slider {
+            box-shadow: 0 0 1px #2196F3;
+        }
+
+        input:checked + .slider:before {
+            -webkit-transform: translateX(26px);
+            -ms-transform: translateX(26px);
+            transform: translateX(26px);
+        }
+
+        /* Rounded sliders */
+        .slider.round {
+            border-radius: 34px;
+        }
+
+            .slider.round:before {
+                border-radius: 50%;
+            }
+    </style>
+}
+<div class="dashboard-content-one">
+    <!-- Breadcubs Area Start Here -->
+    <div class="breadcrumbs-area">
+        <h3>ExamSchdule</h3>
+        <ul>
+            <li>
+                <a href="index.html">Home</a>
+            </li>
+            <li>All ExamSchdule</li>
+        </ul>
+    </div>
+    <!-- Breadcubs Area End Here -->
+    <!-- Teacher Table Area Start Here -->
+    <div class="card height-auto">
+        <div class="card-body">
+            <div class="heading-layout1">
+                <div class="item-title">
+                    <h3>All ExamSchdule Data</h3>
+                </div>
+                <div class="dropdown">
+                    <a class="dropdown-toggle" href="#" role="button"
+                       data-toggle="dropdown" aria-expanded="false">...</a>
+
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <a class="dropdown-item" href="#"><i class="fas fa-times text-orange-red"></i>Close</a>
+                        <a class="dropdown-item" href="#"><i class="fas fa-cogs text-dark-pastel-green"></i>Edit</a>
+                        <a class="dropdown-item" href="#"><i class="fas fa-redo-alt text-orange-peel"></i>Refresh</a>
+                    </div>
+                </div>
+            </div>
+            <form class="mg-b-20">
+                <div class="row gutters-8">
+                    @*<div class="col-4-xxxl col-xl-3 col-lg-3 col-12 form-group">
+                            @Html.DropDownList("FacultyID", new SelectList(ViewBag.Faculties, "FacultyID", "FacultyName"), "--Select Faculty Type--", new { @class = "form-control" })
+                        </div>
+                        <div class="col-4-xxxl col-xl-4 col-lg-3 col-12 form-group">
+                            <input type="text" placeholder="Search ..." class="form-control" name="name" value="@ViewBag.name">
+                        </div>
+
+                        <div class="col-2-xxxl col-xl-2 col-lg-3 col-12 form-group">
+                            <button type="submit" class="fw-btn-fill btn-gradient-yellow">SEARCH</button>
+                        </div>*@
+                    <div class="col-2-xxxl col-xl-3 col-lg-3 col-12 form-group">
+
+                        <a href="@Url.Action("Create","ExamSchedule")" class="btn btn-success fw-btn-fill" role="button" style="min-width:110px">Add ExamSchdule</a>
+                    </div>
+                </div>
+            </form>
+            <div class="table-responsive">
+                <table class="table display data-table text-nowrap">
+                    <thead>
+                        <tr>
+                            <th hidden>
+                                <div class="form-check">
+                                    <input type="checkbox" class="form-check-input checkAll">
+                                </div>
+                            </th>
+                            <th>id</th>
+                            <th>
+                                Class Name
+                            </th>
+                            <th>
+                                Subject Name
+                            </th>
+                            <th>
+                                ExamDay
+                            </th>
+
+                            <th>
+                                TimeIn
+                            </th>
+                            <th>
+                                TimeOut
+                            </th>
+                            <th>
+                                Note
+                            </th>
+                            <th>
+                                Status
+                            </th>
+                            <th>
+                                RoomName
+                            </th>
+
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td hidden>
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input">
+                                    </div>
+                                </td>
+                                <td>@item.ExamScheduleID</td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Class.ClassName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Subject.SubjectName)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Examday)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.TimeIn)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.TimeOut)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Note)
+                                </td>
+                                <td>
+                                    <label class="switch">
+                                        <input type="checkbox" class="toggle-checkbox" data-id="@item.ExamScheduleID" @(item.status ? "checked" : "")>
+                                        <span class="slider round"></span>
+                                    </label>
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Room.RoomName)
+                                </td>
+
+                                <td>
+                                    <div class="dropdown">
+                                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                            <span class="flaticon-more-button-of-three-dots"></span>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-right">
+                                            <a class="dropdown-item" href="@Url.Action("Delete", "ExamSchedule", new { id = item.ExamScheduleID })"><i class="fas fa-times text-orange-red"></i>Delete</a>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- Teacher Table Area End Here -->
+
+</div>
+
+
+@section scripts{
+    <script type="text/javascript">
+    var url = '@Url.Action("UpdateStatus")';
+    $('.toggle-checkbox').click(function () {
+
+        var isChecked = $(this).is(':checked'); //CheckBox checked - True or false
+        var id = $(this).data('id'); //Get the id of that specific checked row
+
+        $.post(url, { id: id, status: isChecked }, function (response) {
+            if (!response.result) {
+
+                toastr.success('Create successful!', 'Success!', {
+                    closeButton: true,
+                    tapToDismiss: false
+                });
+                options = {
+                    tapToDismiss: true,
+                    toastClass: 'toast',
+                    containerId: 'toast-container',
+                    debug: false,
+                    fadeIn: 300,
+                    fadeOut: 1000,
+                    extendedTimeOut: 1000,
+                    iconClass: 'toast-info',
+                    positionClass: 'toast-top-right',
+                    timeOut: 5000, // Set timeOut to 0 to make it sticky
+                    titleClass: 'toast-title',
+                    messageClass: 'toast-message'
+                }
+            } else {
+                toastr.error('Create failed!', 'Error!', {
+
+                    closeButton: true,
+                    tapToDismiss: false
+                });
+            }
+            location.reload();
+        })
+    });
+    </script>
+}

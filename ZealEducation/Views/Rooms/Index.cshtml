@@ -1,0 +1,253 @@
+﻿@model IEnumerable<DataAccess.Room>
+
+
+@{
+    ViewBag.Title = "Index";
+}
+
+
+@section Styles{
+
+    <link href="~/Content/AdminTempale/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/AdminTempale/css/bootstrap.extended.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/AdminTempale/css/toastr.min.css" rel="stylesheet" />
+
+    <style>
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+            .switch input {
+                opacity: 0;
+                width: 0;
+                height: 0;
+            }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+            .slider:before {
+                position: absolute;
+                content: "";
+                height: 26px;
+                width: 26px;
+                left: 4px;
+                bottom: 4px;
+                background-color: white;
+                -webkit-transition: .4s;
+                transition: .4s;
+            }
+
+        input:checked + .slider {
+            background-color: #40b754;
+        }
+
+        input + .slider {
+            background-color: red;
+        }
+
+        input:focus + .slider {
+            box-shadow: 0 0 1px #2196F3;
+        }
+
+        input:checked + .slider:before {
+            -webkit-transform: translateX(26px);
+            -ms-transform: translateX(26px);
+            transform: translateX(26px);
+        }
+
+        /* Rounded sliders */
+        .slider.round {
+            border-radius: 34px;
+        }
+
+            .slider.round:before {
+                border-radius: 50%;
+            }
+    </style>
+}
+
+<div class="content-wrapper">
+    <div class="breadcrumbs-area">
+        <h3>Room</h3>
+        <ul>
+            <li>
+                <a href="index.html">Home</a>
+            </li>
+            <li>Room</li>
+        </ul>
+    </div>
+    <div class="content-body">
+        <div class="row">
+
+            <div class="col-md-4">
+                <div class="card1">
+                    <div class="card-header">
+                        <h4 class="card-title">Add new Room</h4>
+                    </div>
+                    <div class="card-body">
+                        <form class="form form-vertical">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <input type="hidden" id="room-id" class="form-control" value="0">
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group">
+                                        <label for="first-name-icon">Room Name</label>
+                                        <div class="input-group input-group-merge">
+                                            <input type="text" id="room-name" class="form-control" placeholder="Name">
+                                        </div>
+                                        <span class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <div class="form-group">
+
+                                        <div class="input-group input-group-merge">
+                                            <label><input type="checkbox" id="ckStatus" checked="checked">Active</label>
+                                        </div>
+                                        <span class="text-danger"></span>
+                                    </div>
+                                </div>
+
+
+                                <div class="col-12">
+                                    <button type="reset" class="btn-fill-lg btn-gradient-yellow btn-hover-bluedark" id="btn-add-rom">Save</button>
+                                    <button type="reset" class="btn-fill-lg bg-blue-dark btn-hover-yellow">Reset</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="col-8-xxxl col-12">
+                <div class="card height-auto">
+                    <div class="card-body">
+                        <div class="heading-layout1">
+                            <div class="item-title">
+                                <h3>All Subjects</h3>
+                            </div>
+                        </div>
+                        <form class="mg-b-20" action="/Rooms/Index" method="get">
+                            <div class="row gutters-8">
+                                <div class="col-lg-8 col-12 form-group" style="margin-left:60px">
+                                    <input type="text" placeholder="Search by Subject name ..." class="form-control" name="search_name" value="@ViewBag.name">
+                                </div>
+                                <div class="col-lg-2 col-12 form-group">
+                                    <button type="submit"
+                                            class="fw-btn-fill btn-gradient-yellow" id="Search">
+                                        SEARCH
+                                    </button>
+                                </div>
+
+                            </div>
+                        </form>
+                        <div class="table-responsive">
+                            <table class="table display data-table text-nowrap list_sbj" id="list_sbj">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            RoomID
+                                        </th>
+                                        <th>
+                                            RoomName
+                                        </th>
+                                        <th>
+                                            Student
+                                        </th>
+
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr id="row">
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.RoomID)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.RoomName)
+                                            </td>
+                                            <td>
+                                                <label class="switch">
+                                                    <input type="checkbox" class="toggle-checkbox" data-id="@item.RoomID" @(item.Status ? "checked" : "")>
+                                                    <span class="slider round"></span>
+                                                </label>
+                                            </td>
+
+                                            <td>
+                                                <div class="dropdown">
+                                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                                        <span class="flaticon-more-button-of-three-dots"></span>
+                                                    </a>
+                                                    <div class="dropdown-menu dropdown-menu-right">
+                                                        <a class="dropdown-item seat-delete" data-id="@item.RoomID"><i class="fas fa-times text-orange-red"></i>Delete</a>
+                                                        <a class="dropdown-item seat-edit" data-id="@item.RoomID"><i class="fas fa-cogs text-dark-pastel-green"></i>Edit</a>
+
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts{
+
+    <script src="~/Content/assets/js/Scripts.js"></script>
+    <script type="text/javascript">
+    var url = '@Url.Action("UpdateStatus")';
+    $('.toggle-checkbox').click(function () {
+
+        var isChecked = $(this).is(':checked'); //CheckBox checked - True or false
+        var id = $(this).data('id'); //Get the id of that specific checked row
+
+        $.post(url, { id: id, status: isChecked }, function (response) {
+            if (!response.result) {
+
+                toastr.success('Create successful!', 'Success!', {
+                    closeButton: true,
+                    tapToDismiss: false
+                });
+
+            } else {
+                toastr.error('Create failed!', 'Error!', {
+
+                    closeButton: true,
+                    tapToDismiss: false
+                });
+            }
+        })
+    });
+    </script>
+
+}
+
+
+

@@ -1,0 +1,131 @@
+﻿@model DataAccess.Grade
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/TableLayout.cshtml";
+}
+<link href="~/Content/AdminTempale/css2/styleTable.css" rel="stylesheet" />
+<!-- Breadcubs Area Start Here -->
+<div class="breadcrumbs-area">
+    <h3>Grades</h3>
+    <ul>
+        <li>
+            @Html.ActionLink("Back to List", "Index")
+        </li>
+        <li>Add Grade</li>
+    </ul>
+</div>
+<!-- Breadcubs Area End Here -->
+<!-- Class Table Area Start Here -->
+<div class="card height-auto">
+    <div class="card-body">
+        <div class="heading-layout1">
+            <div class="item-title">
+                <h3>Add Grades</h3>
+            </div>
+            <div class="dropdown">
+                <a class="dropdown-toggle" href="#" role="button"
+                   data-toggle="dropdown" aria-expanded="false">...</a>
+
+                <div class="dropdown-menu dropdown-menu-right">
+                    <a class="dropdown-item" href="#"><i class="fas fa-times text-orange-red"></i>Close</a>
+                    <a class="dropdown-item" href="#"><i class="fas fa-cogs text-dark-pastel-green"></i>Edit</a>
+                    <a class="dropdown-item" href="#"><i class="fas fa-redo-alt text-orange-peel"></i>Refresh</a>
+                </div>
+            </div>
+        </div>
+        <form action="/Grades/Create" method="post">
+            @Html.AntiForgeryToken()
+            <div class="form-horizontal">
+                <div class="mg-b-20">
+                    <div class="row gutters-8">
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <div class="col-lg-4 col-12 form-group">
+                            <label>Class Name *</label>
+                            <div>
+                                @Html.DropDownList("ClassID", null, "-- Select Class --", htmlAttributes: new { @class = " form-control" })
+                            </div>
+                        </div>
+                        <div class="col-lg-1 col-12 form-group"></div>
+                        <div class="col-lg-4 col-12 form-group">
+                            <label>Subject Name *</label>
+                            <div>
+                                <select id="SubjectID" name="SubjectID" class="form-control">
+                                    <option value="">Select Subject</option>
+                                </select>
+                                @Html.ValidationMessageFor(model => model.SubjectID, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        @*<div class="form-group">
+                                @Html.LabelFor(model => model.GradeTypeID, "GradeTypeID", htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.DropDownList("GradeTypeID", null, htmlAttributes: new { @class = "form-control" })
+                                    @Html.ValidationMessageFor(model => model.GradeTypeID, "", new { @class = "text-danger" })
+                                </div>
+                            </div>*@
+                    </div>
+
+                </div>
+                <div class="table-responsive">
+                    <table id="studentTable" class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>
+                                    STT
+                                </th>
+                                <th>
+                                    Student ID
+                                </th>
+                                <th>
+                                    Student Name
+                                </th>
+
+                                <th>Grade Of Number</th>
+                                <th>Note</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <script id="ok"></script>
+                    <div id="btnSave" class="col-12 form-group mg-t-8">
+                        
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<!-- Class Table Area End Here -->
+
+
+<script>
+    var Popup, dataTable;
+    $(document).ready(function () {
+        $("#ClassID").change(function () {
+            $.get("/Grades/GetSubjectList", { ClassID: $("#ClassID").val() }, function (data) {
+                $("#SubjectID").empty();
+                $("#SubjectID").append("<option value=''>-- Select Subject --</option>");
+                $.each(data, function (index, row) {
+                    $("#SubjectID").append("<option value='" + row.SubjectID + "'>" + row.SubjectName + "</option>");
+                })
+            })
+        })
+    })
+    $(document).ready(function () {
+        $("#SubjectID").change(function () {
+            $.get("/Grades/StudentList", { ClassID: $("#ClassID").val() }, function (data) {
+                var i = 1;
+                $.each(data, function (index, row) {
+                    
+                    $("#studentTable > tbody").append("<tr><td>"+i+"</td><td>" + row.StudentID + "<input type='text' name='StudentID' value='" + row.StudentID + "' style='display:none;' /></td><td>" + row.StudentName + "</td><td><input type='text'class='decimal form-control' name='GradeOfNumber' value='0' autocomplete='off' /></td><td><input type='text' class='form-control' name='Note' value='' /></td></tr>");
+                    i++;
+                })
+                $("#ok").append("$(function() {$('.decimal').bind('change keyup input', function() {var position = this.selectionStart - 1;var fixed = this.value.replace(/[^0-9\.]/g, '');if (fixed.charAt(0) === '.')fixed = fixed.slice(1);var pos = fixed.indexOf('.') + 1;if (pos >= 0)fixed = fixed.substr(0, pos) + fixed.slice(pos).replace('.', '');if (this.value !== fixed) {this.value = fixed;this.selectionStart = position;this.selectionEnd = position;}});});$( '.decimal' ).blur(function() {if (this.value == '' || this.value == null) {this.value = '0.00';}else if(this.value > 20){this.value = 20;}else{this.value = parseFloat(this.value).toFixed(2);}});");
+                $("#btnSave").append("<button type='submit' class='btn-fill-lg btn-gradient-yellow btn-hover-bluedark'>Save</button>")
+            })
+        })
+    })
+</script>

@@ -1,0 +1,98 @@
+﻿@model DataAccess.Student
+   
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<h2>Edit</h2>
+
+
+@using (Html.BeginForm(new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>StudentTable</h4>
+        <hr />
+        <form class="new-added-form">
+            <div class="row">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.StudentID)
+                <input hidden id="getGender" name="getGender" value="@Model.Gender" />
+                <div class="col-xl-4 col-lg-6 col-12 form-group">
+                    <label>Student Name *</label>
+                    <div class="col-md-12">
+                        @Html.EditorFor(model => model.StudentName, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.StudentName, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-xl-4 col-lg-6 col-12 form-group">
+                    <label>Address *</label>
+                    <div class="col-md-12">
+                        @Html.EditorFor(model => model.Address, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-xl-4 col-lg-6 col-12 form-group">
+                    <label>Gender *</label>
+                    <div class="col-md-12">
+                        @Html.DropDownList("getGen", null, htmlAttributes: new { @class = "form-control select2" })
+                    </div>
+                </div>
+                <div class="col-xl-4 col-lg-6 col-12 form-group">
+                    <label>Date Of Birth *</label>
+                    <input type="text" id="Birthday" name="Birthday" class="form-control air-datepicker"
+                           data-position='bottom right' value=" @Html.DisplayFor(model => model.Birthday)">
+                </div>
+                <div class="col-xl-4 col-lg-6 col-12 form-group">
+                    <label>E-Mail</label>
+                    <div class="col-md-12">
+                        @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-xl-4 col-lg-6 col-12 form-group">
+                    <label>Password</label>
+                    <div class="col-md-12">
+                        @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", @type = "password" } })
+                        @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-xl-4 col-lg-6 col-12 form-group">
+                    <label>Phone</label>
+                    <div class="col-md-12">
+                        @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-xl-4 col-lg-6 col-12 form-group">
+                    <label>Status *</label>
+                    <div class="col-md-12">
+                        @Html.DropDownList("getSttus", null, htmlAttributes: new { @class = "form-control select2" })
+                    </div>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-12 form-group">
+                    <label>Educationlevel</label>
+                    <div class="col-md-12">
+                        @Html.EditorFor(model => model.Educationlevel, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Educationlevel, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="col-xl-6 col-lg-6 col-12 form-group">
+                    <label class="text-dark-medium">Upload Student Photo</label>
+                    <div class="col-md-10">
+                        <input type="file" name="image" />
+                        <img src="@Model.Image" alt="" name="img" />
+                        @Html.ValidationMessageFor(model => model.Image, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-12 form-group mg-t-8">
+                    <button type="submit" class="btn-fill-lg btn-gradient-yellow btn-hover-bluedark" value="Create">Save</button>
+                </div>
+            </div>
+        </form>
+    </div>
+}

@@ -1,0 +1,118 @@
+﻿@model IEnumerable<ZealEducation.Models.StudentAtt>
+
+@{
+    ViewBag.Title = "AttendanceTable";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    <!--Get number of days of current month-->
+    var DaysInmonth = DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month);
+    var month = DateTime.Now.Month;
+    var year = DateTime.Now.Year;
+    <!--Create a CurrentName field-->
+    var CurrentName = "";
+}
+
+<!-- Breadcubs Area Start Here -->
+<div class="breadcrumbs-area">
+    <h3>Student Attendence</h3>
+    <ul>
+        <li>
+            <a href="index.html">Home</a>
+        </li>
+        <li>Attendence</li>
+    </ul>
+</div>
+<!-- Breadcubs Area End Here -->
+<div class="row">
+    <!-- Student Attendence Search Area Start Here -->
+    
+    <!-- Student Attendence Search Area End Here -->
+    <!-- Student Attendence Area Start Here -->
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="heading-layout1">
+                    <div class="item-title">
+                        <h3>Attendence Sheet Of Class One: @month-@year</h3>
+                    </div>
+                    <div class="dropdown">
+                        <a class="dropdown-toggle" href="#" role="button"
+                           data-toggle="dropdown" aria-expanded="false">...</a>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <a class="dropdown-item" href="#"><i class="fas fa-times text-orange-red"></i>Close</a>
+                            <a class="dropdown-item" href="#"><i class="fas fa-cogs text-dark-pastel-green"></i>Edit</a>
+                            <a class="dropdown-item" href="#"><i class="fas fa-redo-alt text-orange-peel"></i>Refresh</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-responsive">
+                    <table class="table bs-table table-striped table-bordered text-nowrap">
+                        <thead>
+                            <tr>
+                                <th>Student ID</th>
+                                <th>Student Name</th>
+                                <!--Loop all the days of month and print it-->
+                                @for (var numb = 1; numb <= DaysInmonth; numb++)
+                                {
+                                    <th>@numb</th>
+                                }
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!--Loop model-->
+                            @foreach (var emp in Model)
+                            {
+                                //if Name is repeated, skip
+                                if (CurrentName != emp.Student_name)
+                                {
+                            <tr>
+                                <!--print employee name one time only at the start of row-->
+                                <td>@emp.Id</td>
+                                <td>@emp.Student_name</td>
+
+                                <!--loop all days of month-->
+                                @for (var numb = 1; numb <= DaysInmonth; numb++)
+                                {
+                            <td>
+                                @{
+                                    <!--print only that date time value which is equal to current date(as it will match column header) and current employee name, else print empty-->
+                                    var GetThatDayValue = Model.Where(a => a.Date.Value.Day == numb && a.Student_name == emp.Student_name).FirstOrDefault();
+                                    if (GetThatDayValue != null)
+                                    {
+                                        @*var DD = GetThatDayValue.InoutTime + "";
+                                        <text> @DD </text>*@
+                                        var AttenTypeID = GetThatDayValue.AttendanceTypeID;
+                                        var AttenName = "";
+                                        
+                                        if (AttenTypeID == 1)
+                                        {
+                                            AttenName = "fas fa-check text-success";
+                                        }
+                                        else if (AttenTypeID == 2)
+                                        {
+                                            AttenName = "fas fa-times text-danger";
+                                        }
+                                        else if (AttenTypeID == 3)
+                                        {
+                                            AttenName = "fas fa-info text-info";
+                                        }
+                                        else
+                                        {
+                                            AttenName = "";
+                                        }
+                                        @*<text> @AttenName </text>*@
+                                        <i class="@AttenName"></i>
+                                    }
+
+                                }
+                            </td>
+                                }
+                            </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

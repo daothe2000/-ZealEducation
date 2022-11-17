@@ -1,0 +1,8 @@
+admin : 
+      User: admin
+      Password: admin
+      Type: admin
+teacher:
+      User: teacher1@gmail.com
+      Password: 123456
+      Type: teacher

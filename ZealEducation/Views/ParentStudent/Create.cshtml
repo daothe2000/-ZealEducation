@@ -1,0 +1,140 @@
+﻿@model DataAccess.RelParentStudent
+
+<script src="~/Content/assets/js/toastr.min.js"></script>
+<link href="~/Content/AdminTempale/css/toastr.min.css" rel="stylesheet" />
+<input type="hidden" id="success" value="@TempData["success"]" />
+<input type="hidden" id="info" value="@TempData["info"]" />
+<input type="hidden" id="info" value="@TempData["warning"]" />
+<input type="hidden" id="error" value="@TempData["error"]" />
+<h2>Create</h2>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <!-- Student Table Area Start Here -->
+        <div class="card height-auto">
+            <div class="card-body">
+                <div class="heading-layout1">
+                    <div class="item-title">
+                        <h3>All Parent Student Data</h3>
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <h4>@Html.Raw(ViewBag.err)</h4>
+                <div class="form-group new-added-form">
+                    <div class="row gutters-8">
+                        <div class="col-xl-6 col-lg-6 col-12 form-group">
+                            @Html.LabelFor(model => model.ParentID, "ParentID", htmlAttributes: new { @class = "control-label col-md-12" })
+                            <div class="col-md-12 col-xl-12 col-lg-12 form-group">
+                                @Html.DropDownList("ParentID", null, htmlAttributes: new { @class = "form-control select2" })
+                                @Html.ValidationMessageFor(model => model.ParentID, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-12 form-group">
+                            @Html.LabelFor(model => model.RelationWithStudent, htmlAttributes: new { @class = "control-label col-md-12" })
+                            <div class="col-md-12">
+                                @Html.EditorFor(model => model.RelationWithStudent, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.RelationWithStudent, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="table-responsive">
+                    <table class="table display data-table text-nowrap">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input checkAll">
+                                        <label class="form-check-label">Student Id</label>
+                                    </div>
+                                </th>
+                                <th>
+                                    Full Name
+                                </th>
+                                <th>
+                                    Address
+                                </th>
+                                <th>
+                                    Phone
+                                </th>
+                                <th>
+                                    Eamil
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var student in @ViewBag.Student)
+                            {
+                                <tr>
+                                    <td>
+                                        <div class="form-check">
+                                            <input type="checkbox" name="StudentIds" value="@student.StudentID" class="form-check-input">
+                                            <label class="form-check-label">@student.StudentID</label>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        @student.StudentName
+                                    </td>
+                                    <td>
+                                        @student.Address
+                                    </td>
+                                    <td>
+                                        @student.Phone
+                                    </td>
+                                    <td>
+                                        @student.Email
+                                    </td>
+
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-12 form-group mg-t-8">
+                    <button type="submit" value="Create" class="btn-fill-lg btn-gradient-yellow btn-hover-bluedark">Add Student to Parent</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@section Scripts{
+
+    <script>
+        $(function () {
+            if ($('#success').val()) {
+                displayMessage($('#success').val(), 'success');
+            }
+            if ($('#info').val()) {
+                displayMessage($('#info').val(), 'info');
+            }
+            if ($('#warning').val()) {
+                displayMessage($('#warning').val(), 'warning');
+            }
+            if ($('#error').val()) {
+                displayMessage($('#error').val(), 'error');
+                $('#ClassID').prop('selectedIndex', 0);
+            }
+        });
+        var displayMessage = function (message, msgType) {
+            toastr.options = {
+                "closeButton": true,
+                "debug": false,
+                "positionClass": "toast-top-right",
+                "onClick": null,
+                "showDuration": "3000",
+                "hideDuration": "1000",
+                "timeOut": "8000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            };
+            toastr[msgType](message);
+        };
+    </script>
+}

@@ -1,0 +1,247 @@
+﻿
+
+@{
+    ViewBag.Title = "Create";
+}
+@section Styles{
+    
+    <link href="~/Content/AdminTempale/css/bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/AdminTempale/css/bootstrap.extended.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/AdminTempale/css/toastr.min.css" rel="stylesheet" />
+}
+<div class="content-body">
+    <section id="multiple-column-form">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+
+                    <div class="breadcrumbs-area">
+                        <h3>Teacher</h3>
+                        <ul>
+                            <li>
+                                <a href="index.html">Home</a>
+                            </li>
+                            <li>Add New Teacher Subject</li>
+                        </ul>
+                    </div>
+
+                    <div class="card-body">
+
+                        <div class="row">
+
+                            <div class="col-md-6 col-12">
+                                <div class="form-group">
+                                    <label for="ShopName">Faculty</label>
+                                    <div>
+                                        <select class="form-control subject_teacher" id="form-select-Faculty">
+                                            <option value="0">Choose</option>
+                                            @foreach (var data in ViewBag.FacultyTables)
+                                            {
+                                                <option value="@data.FacultyID">@data.FacultyName</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="invalid-feedback" style="display:block;"></div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-12">
+                                <div class="form-group">
+                                    <label for="ServiceId">Teacher</label>
+                                    <div>
+                                        <select class="form-control subject_teacher1" id="form-select-teacher"></select>
+                                    </div>
+                                    <div class="invalid-feedback" style="display:block;font-size:15px;"></div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 col-12">
+                                <div class="form-group">
+                                    <label for="Description">Description</label>
+                                    <div>
+                                        <select class="subject_teacher2 form-control" name="subjectIDs[]" multiple="multiple" id="c"></select>
+                                    </div>
+                                    <div class="invalid-feedback" style="display:block;font-size:15px;"></div>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <button type="submit" class="btn-fill-lg btn-gradient-yellow btn-hover-bluedark btn-save-screening">Save</button>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div>
+        <a href="@Url.Action("Index","TeacherTables")" class="dt-button btn btn-outline-primary waves-effect" tabindex="0" aria-controls="DataTables_Table_0" type="button"><span>Back To List</span></a>
+    </div>
+</div>
+@section scripts{
+
+    <script src="~/Content/assets/js/sweetalert.min.js"></script>
+    <script src="~/Scripts/mustache.min.js"></script>
+    <script src="~/Content/assets/js/Select2.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#form-select-Faculty').select2({
+                placeholder: "Select a Faculty",
+                allowClear: true
+            });
+            $('#form-select-teacher').select2({
+                placeholder: "Select a Teacher",
+                allowClear: true
+            });
+            $('.subject_teacher2').select2({
+                placeholder: "Select a Subject",
+                allowClear: true
+            });
+        });
+        $(document).on('change', '#form-select-Faculty', function () {
+
+            var hallId = $(this).val();
+            if (hallId == "") {
+                $("#form-select-teacher").html('');
+                $("#c").html('');
+            }
+            FillCity(hallId);
+            Subject(hallId)
+        });
+        function FillCity(id) {
+            if (id != null) {
+                $.ajax({
+                    url: '/TeacherSubject/FillCity',
+                    type: 'GET',
+                    dataType: 'JSON',
+                    data: { id: id },
+                    success: function (res) {
+                        $("#form-select-teacher").html('');
+                        $.each(res, function (i, item) {
+                            $("#form-select-teacher").append(
+                                $('<option></option>').val(item.teacherID).html(item.teacherName));
+                            //'<option value="' + item.teacherID + '">' + item.teacherName+'<option>');
+                        });
+
+                    }
+                });
+            }
+
+
+        }
+
+        function Subject(id) {
+            if (id != null) {
+                $.ajax({
+                    url: '/TeacherSubject/Subject',
+                    type: 'GET',
+                    dataType: 'JSON',
+                    data: { id: id },
+                    success: function (res) {
+                        $("#c").html('');
+                        $.each(res, function (i, item) {
+                            $("#c").append(
+                                $('<option></option>').val(item.subjectID).html(item.subjectName));
+                            //'<option value="' + item.teacherID + '">' + item.teacherName+'<option>');
+                        });
+
+                    }
+                });
+            }
+
+
+        }
+        $(document).on('click', '.btn-save-screening', function () {
+            if (ValidateScreening()) {
+
+
+                var _teacher = $('#form-select-teacher').val();
+                var _genre = $('.subject_teacher2').val();
+
+
+
+
+                Create(_teacher, _genre);
+            }
+        });
+
+
+
+        function Create(Teacher, _subjectIDs) {
+            if (_subjectIDs != null && _subjectIDs.length > 0) {
+                $.ajax({
+                    url: 'Create',
+                    type: 'POST',
+                    data: JSON.stringify({ teacherID: Teacher, subjectIDs: _subjectIDs }),
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (res) {
+                        if (res.result) {
+                            window.location = res.newurl;
+                            toastr.success('Create successful!', 'Success!', {
+                                closeButton: true,
+                                tapToDismiss: false
+                            });
+
+                        } else {
+                            toastr.error('Create failed!', 'Error!', {
+
+                                closeButton: true,
+                                tapToDismiss: false
+                            });
+                        }
+                        $("#form-select-Faculty").html('');
+                        location.reload();
+                        window.location = res.newurl;
+                    }
+
+                });
+            }
+        }
+        function ValidateScreening() {
+            var check = true;
+
+
+            var _teacher = $('#form-select-teacher').val();
+
+
+
+            if (_teacher == null) {
+                $('#form-select-teacher').parent().next().html('Teacher cannot be empty!');
+                check = false;
+            } else if (checkTime(_teacher)) {
+                $('#form-select-teacher').parent().next().html('The teacher already exists in the teaching assignment  subject section');
+                check = false;
+            } else {
+                $('#form-select-teacher').parent().next().html('');
+            }
+            var _genre = $('.subject_teacher2').val();
+            if (_genre.length == 0 || _genre == null) {
+                $('.subject_teacher2').parent().next().html('Subject cannot be empty!!');
+                check = false;
+            } else {
+                $('.subject_teacher2').parent().next().html('');
+            }
+
+
+
+            return check;
+        }
+        function checkTime(_teacher) {
+            var result = false;
+            $.ajax({
+                url: 'CheckTime',
+                type: 'POST',
+                data: { _teacher: _teacher },
+                async: false,
+                success: function (res) {
+                    result = res.success
+                }
+            });
+
+            return result;
+        }
+    </script>
+}

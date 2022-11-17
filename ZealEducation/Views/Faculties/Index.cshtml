@@ -1,0 +1,230 @@
+﻿@model IEnumerable<DataAccess.Faculty>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="dashboard-content-one">
+    <!-- Breadcubs Area Start Here -->
+    <div class="breadcrumbs-area">
+        <h3>All Faculty</h3>
+        <ul>
+            <li>
+                <a href="index.html">Home</a>
+            </li>
+            <li>Faculty</li>
+        </ul>
+    </div>
+    <!-- Breadcubs Area End Here -->
+    <!-- All Subjects Area Start Here -->
+    <div class="row">
+        <div class="col-4-xxxl col-12">
+            <div class="card height-auto">
+                <div class="card-body">
+                    <div class="heading-layout1">
+                        <div class="item-title">
+                            <h3>New Faculty</h3>
+                            
+                        </div>
+                        <div class="dropdown">
+                            <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown"
+                               aria-expanded="false">...</a>
+
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <a class="dropdown-item" href="#">
+                                    <i class="fas fa-cogs text-dark-pastel-green"></i>Edit
+                                </a>
+                                <a class="dropdown-item" href="@Url.Action("Index", "Faculties")">
+                                    <i class="fas fa-redo-alt text-orange-peel"></i>Refresh
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <form class="new-added-form">
+                        <div class="row">
+                            <div class="col-12-xxxl col-lg-6 col-12 form-group">
+                                <label id="id">Faculty Id *</label>
+                                <input type="text" id="facultyId" class="form-control">
+                            </div>
+
+                            <div class="col-12-xxxl col-lg-6 col-12 form-group">
+                                <label>Faculty Name *</label>
+                                <input type="text" id="facultyName" class="form-control">
+                            </div>
+                            <div class="col-12-xxxl col-lg-6 col-12 form-group">
+                                <label>Description *</label>
+                                <input type="text" placeholder="" id="description" class="form-control">
+                            </div>
+
+                            <div class="col-12 form-group mg-t-8">
+                                <button type="button" id="Save" class="btn-fill-lg btn-gradient-yellow btn-hover-bluedark">Save</button>
+                                <button type="reset" class="btn-fill-lg bg-blue-dark btn-hover-yellow">Reset</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-8-xxxl col-12">
+            <div class="card height-auto">
+                <div class="card-body">
+                    <div class="heading-layout1">
+                        <div class="item-title">
+                            <h3>All Faculty</h3>
+                        </div>
+                    </div>
+                    <h4>@TempData["error"]</h4>
+                    <form class="mg-b-20" action="/Faculties/Index" method="get">
+                        <div class="row gutters-8">
+
+                            <div class="col-lg-9 col-12 form-group">
+                                <input type="text" placeholder="Search by Subject name ..." class="form-control" name="search_name">
+                            </div>
+                            <div class="col-lg-2 col-12 form-group">
+                                <button type="submit"
+                                        class="fw-btn-fill btn-gradient-yellow">
+                                    SEARCH
+                                </button>
+                            </div>
+
+                        </div>
+                    </form>
+                    <div class="table-responsive">
+                        <table class="table display data-table text-nowrap list_fac" id="list_fac">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.FacultyID)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.FacultyName)
+                                    </th>
+                                    <th>
+                                        @Html.DisplayNameFor(model => model.description)
+                                    </th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    <tr id="row">
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.FacultyID)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.FacultyName)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.description)
+                                        </td>
+                                        <td>
+                                            <div class="dropdown">
+                                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                                    <span class="flaticon-more-button-of-three-dots"></span>
+                                                </a>
+                                                <div class="dropdown-menu dropdown-menu-right">
+                                                    <a class="dropdown-item" href="@Url.Action("Delete", "Faculties", new { id = item.FacultyID })">
+                                                        <i class="fas fa-times text-orange-red" style="padding-right: 15px"></i>Delete
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <script>
+        $(document).ready(function () {
+            var checkEdit = false;
+            function AjaxCall(url, data, type) {
+                return $.ajax({
+                    url: url,
+                    type: type ? type : 'GET',
+                    data: data,
+                    contentType: 'application/json'
+                });
+            };
+
+
+             $("#Save").click(function () {
+                 var facuOjb = {
+                    FacultyID: $("#facultyId").val(),
+                    FacultyName: $("#facultyName").val(),
+                    description: $("#description").val()
+                };
+
+                if (checkEdit == false) {
+                    $.ajax({
+                        url: "@Url.Action("CreateData", "Faculties")",
+                        data: {
+                            FacultyID: $("#facultyId").val(),
+                            FacultyName: $("#facultyName").val(),
+                            description: $("#description").val()
+                        },
+                        type: "POST",
+                        success: function (result) {
+                            console.log(result);
+                            console.log("oke thanh cong");
+                            window.location = "https://localhost:44389/Faculties";
+
+                        },
+                        error: function (e) {
+                            alert('faculty id already exists');
+                        }
+                    });
+                } else {
+                    $.ajax({
+                        url: "@Url.Action("EditData", "Faculties")",
+                        data: {
+                            FacultyID: $("#facultyId").val(),
+                            FacultyName: $("#facultyName").val(),
+                            description: $("#description").val()
+                        },
+                        type: "POST",
+                        success: function (result) {
+                            console.log(result);
+                            console.log("oke thanh cong");
+                            window.location = "https://localhost:44389/Faculties";
+
+                        },
+                        error: function (e) {
+                            alert(facuOjb);
+                        }
+                    });
+                }
+            });
+
+            $("table tbody #row").click(function () {
+                $(this).addClass('selected').siblings().removeClass('selected');
+                var value = $(this).find('td:first').html();
+                var parseInt = value.replace('\n', '');
+                var ac = parseInt.replace('\n', '');
+                var id = ac.trim(); 
+                $.ajax({
+                    type: "GET",
+                    url: "@Url.Action("getByIdToJson", "Faculties")",
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    data: { id: id },
+                    success: function (rs) {
+                        $("#id").hide(),
+                        $("#facultyId").val(rs.FacultyID).hide(),
+                        $("#facultyName").val(rs.FacultyName);
+                        $("#description").val(rs.description);
+                        checkEdit = true;
+                    },
+                    error: function (ex) {
+                        alert("Fail");
+                    }
+                });
+            });
+        });
+    </script>
